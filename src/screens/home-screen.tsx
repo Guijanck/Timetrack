@@ -29,8 +29,8 @@ enum RegisterType {
 
 // Dados do usuário (simulados)
 const userData = {
-  name: "João da Silva",
-  email: "joao.silva@email.com",
+  name: "Admin",
+  email: "admin@timetrack.com",
   isPJ: true,
 }
 

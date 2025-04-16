@@ -1,20 +1,3 @@
-//import React from 'react';
-//import { View, Text, StyleSheet } from 'react-native';
-
-// export default function AuthScreen() {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.text}>Bem-vindo à Auth!</Text>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-//   text: { fontSize: 22 },
-// });
-
-
 "use client"
 
 import type React from "react"
@@ -30,30 +13,47 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
+  Alert
 } from "react-native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import type { RootStackParamList } from "../../App"
 
-
-// interface AuthScreenProps {
-//   onBack: () => void
-//   onLogin: (email: string, password: string, employerType: string) => void
-//   onForgotPassword: () => void
-// }
-
-
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'Auth'>;
+
+// Mock user credentials
+const MOCK_USER = {
+  email: "admin@timetrack.com",
+  password: "admin123"
+};
 
 const AuthScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [employerType, setEmployerType] = useState("CLT")
+  const [error, setError] = useState("")
 
-  // const handleLogin = () => {
-  //   onLogin(email, password, employerType)
-  // }
+  const handleLogin = () => {
+    // Reset any previous error
+    setError("");
+    
+    // Check if the credentials match the mock user
+    if (email === MOCK_USER.email && password === MOCK_USER.password) {
+      // Successful login
+      navigation.navigate('Home');
+    } else {
+      // Failed login
+      setError("Email ou senha inválidos. Tente novamente.");
+      
+      // You can also use Alert instead of the error state
+      Alert.alert(
+        "Erro de Autenticação",
+        "Email ou senha inválidos. Tente novamente.",
+        [{ text: "OK" }]
+      );
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,8 +120,15 @@ const AuthScreen: React.FC = () => {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.loginButton} activeOpacity={0.8}>
-              <Text style={styles.loginButtonText} onPress={() => navigation.navigate('Home')}>ENTRAR</Text>
+            {/* Error message */}
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TouchableOpacity 
+              style={styles.loginButton} 
+              activeOpacity={0.8}
+              onPress={handleLogin}
+            >
+              <Text style={styles.loginButtonText}>ENTRAR</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.forgotPasswordContainer}>
@@ -244,6 +251,17 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 14,
   },
+  errorText: {
+    color: "#FF3B30",
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 16,
+  }
 })
 
 export default AuthScreen
+
+// To test this component:
+// 1. Valid credentials: admin@timetrack.com / admin123
+// 2. Any other combination will show an error
+console.log("Mock user credentials for testing:", MOCK_USER);

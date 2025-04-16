@@ -2,7 +2,7 @@
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   View,
   Text,
@@ -18,20 +18,19 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons"
 import { RootStackParamList } from "../../App"
 
-// interface ResetPasswordScreenProps {
-//   onBack: () => void
-//   onSubmit: (newPassword: string) => void
-//   email: string
-// }
-
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'ResetPassword'>;
-
 
 const ResetPasswordScreen = ({ navigation }: any) => {
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false)
+  
+  // Check if both password fields are filled to enable/disable button
+  useEffect(() => {
+    setIsButtonEnabled(newPassword.trim().length > 0 && confirmPassword.trim().length > 0);
+  }, [newPassword, confirmPassword]);
 
   const handleSubmit = () => {
     // Validações
@@ -50,8 +49,17 @@ const ResetPasswordScreen = ({ navigation }: any) => {
       return
     }
 
-    navigation.navigate('Auth')
-    //onSubmit(newPassword)
+    // Show success message before navigating
+    Alert.alert(
+      "Sucesso",
+      "Senha alterada com sucesso!",
+      [
+        { 
+          text: "OK", 
+          onPress: () => navigation.navigate('Auth')
+        }
+      ]
+    )
   }
 
   return (
@@ -60,7 +68,7 @@ const ResetPasswordScreen = ({ navigation }: any) => {
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardAvoidingView}>
         <View style={styles.content}>
           {/* Back Button */}
-          <TouchableOpacity style={styles.backButton}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Icon name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
 
@@ -104,8 +112,13 @@ const ResetPasswordScreen = ({ navigation }: any) => {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.confirmButton} onPress={handleSubmit} activeOpacity={0.8}>
-              <Text style={styles.confirmButtonText} onPress={() => navigation.navigate('Auth')}>Confirmar</Text>
+            <TouchableOpacity 
+              style={[styles.confirmButton, !isButtonEnabled && styles.disabledButton]} 
+              onPress={handleSubmit} 
+              activeOpacity={0.8}
+              disabled={!isButtonEnabled}
+            >
+              <Text style={styles.confirmButtonText}>Confirmar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -187,6 +200,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  disabledButton: {
+    backgroundColor: "#666",
+    opacity: 0.5,
+  },
   confirmButtonText: {
     color: "#fff",
     fontSize: 16,
@@ -195,3 +212,6 @@ const styles = StyleSheet.create({
 })
 
 export default ResetPasswordScreen
+
+// Test the component
+console.log("ResetPasswordScreen loaded with success message");

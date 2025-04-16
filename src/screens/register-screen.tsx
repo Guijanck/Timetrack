@@ -14,23 +14,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert
 } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import type { RootStackParamList } from "../../App"
-
-// interface RegisterScreenProps {
-//   onBack: () => void
-//   onRegister: (userData: {
-//     fullName: string
-//     email: string
-//     employerType: string
-//     cpf: string
-//     companyCode: string
-//     password: string
-//   }) => void
-// }
+import Icon from "react-native-vector-icons/MaterialIcons" // Import the icon library
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
@@ -43,49 +32,89 @@ const RegisterScreen: React.FC = () => {
   const [companyCode, setCompanyCode] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  // Add state for password visibility
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const handleRegister = () => {
-    // Validação básica
-    if (!fullName || !email || !cpf || !password || !confirmPassword) {
-      //alert("Por favor, preencha todos os campos")
-      return
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    
+    // Check all required fields
+    if (!fullName.trim()) newErrors.fullName = "Nome completo é obrigatório"
+    if (!email.trim()) newErrors.email = "Email é obrigatório"
+    if (!cpf.trim()) newErrors.cpf = "CPF é obrigatório"
+    if (!companyCode.trim()) newErrors.companyCode = "Código da empresa é obrigatório"
+    if (!password) newErrors.password = "Senha é obrigatória"
+    if (!confirmPassword) newErrors.confirmPassword = "Confirmação de senha é obrigatória"
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (email.trim() && !emailRegex.test(email)) {
+      newErrors.email = "Formato de email inválido"
     }
-
-    if (password !== confirmPassword) {
-      //alert("As senhas não coincidem")
-      return
+    
+    // Check if passwords match
+    if (password && confirmPassword && password !== confirmPassword) {
+      newErrors.confirmPassword = "As senhas não coincidem"
     }
-
-    // onRegister({
-    //   fullName,
-    //   email,
-    //   employerType,
-    //   cpf,
-    //   companyCode,
-    //   password,
-    // })
+    
+    // CPF should be complete
+    if (cpf.trim() && cpf.length < 14) {
+      newErrors.cpf = "CPF incompleto"
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
-  // Função para formatar o CPF enquanto o usuário digita
+  const handleRegister = () => {
+    if (validateForm()) {
+      // Show success message
+      Alert.alert(
+        "Sucesso",
+        "Usuário registrado com sucesso!",
+        [
+          { 
+            text: "OK", 
+            onPress: () => navigation.navigate('Auth')
+          }
+        ]
+      )
+    }
+  }
+
+  // Função completamente reescrita para formatar o CPF
   const formatCPF = (text: string) => {
-    const cleaned = text.replace(/\D/g, "")
-    let formatted = cleaned
-
-    if (cleaned.length > 3) {
-      formatted = cleaned.substring(0, 3) + "." + cleaned.substring(3)
+    // Remove todos os caracteres não numéricos
+    const digits = text.replace(/\D/g, "");
+    
+    // Limita a 11 dígitos
+    const limitedDigits = digits.slice(0, 11);
+    
+    // Aplica a formatação
+    let formattedCPF = "";
+    
+    for (let i = 0; i < limitedDigits.length; i++) {
+      // Adiciona o dígito
+      formattedCPF += limitedDigits[i];
+      
+      // Adiciona o ponto após o 3º e o 6º dígito
+      if (i === 2 || i === 5) {
+        formattedCPF += ".";
+      }
+      
+      // Adiciona o hífen após o 9º dígito
+      if (i === 8) {
+        formattedCPF += "-";
+      }
     }
-    if (cleaned.length > 6) {
-      formatted = formatted.substring(0, 7) + "." + cleaned.substring(7)
-    }
-    if (cleaned.length > 9) {
-      formatted = formatted.substring(0, 11) + "-" + cleaned.substring(11, 13)
-    }
-
-    return formatted.substring(0, 14)
+    
+    return formattedCPF;
   }
 
   const handleCPFChange = (text: string) => {
-    setCpf(formatCPF(text))
+    setCpf(formatCPF(text));
   }
 
   return (
@@ -96,7 +125,7 @@ const RegisterScreen: React.FC = () => {
           <View style={styles.content}>
             {/* Back Button */}
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-              {/* <Ionicons name="arrow-back" size={24} color="#000" /> */}
+              <Icon name="arrow-back" size={24} color="#000" />
             </TouchableOpacity>
 
             {/* Header */}
@@ -111,23 +140,25 @@ const RegisterScreen: React.FC = () => {
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Nome Completo</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.fullName ? styles.inputError : null]}
                   placeholder="Digite seu nome completo"
                   value={fullName}
                   onChangeText={setFullName}
                 />
+                {errors.fullName ? <Text style={styles.errorText}>{errors.fullName}</Text> : null}
               </View>
 
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Email</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.email ? styles.inputError : null]}
                   placeholder="nome@email.com"
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
+                {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
               </View>
 
               <View style={styles.inputContainer}>
@@ -156,50 +187,68 @@ const RegisterScreen: React.FC = () => {
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>CPF</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.cpf ? styles.inputError : null]}
                   placeholder="000.000.000-00"
                   value={cpf}
                   onChangeText={handleCPFChange}
                   keyboardType="numeric"
                   maxLength={14}
                 />
+                {errors.cpf ? <Text style={styles.errorText}>{errors.cpf}</Text> : null}
               </View>
 
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Código da empresa</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.companyCode ? styles.inputError : null]}
                   placeholder="Ex: 0000"
                   value={companyCode}
                   onChangeText={setCompanyCode}
                   keyboardType="numeric"
                 />
+                {errors.companyCode ? <Text style={styles.errorText}>{errors.companyCode}</Text> : null}
               </View>
 
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Senha</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder=""
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                />
+                <View style={styles.passwordInputContainer}>
+                  <TextInput
+                    style={[styles.passwordInput, errors.password ? styles.inputError : null]}
+                    placeholder=""
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
+                    <Icon name={showPassword ? "visibility-off" : "visibility"} size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
               </View>
 
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Confirmar Senha</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder=""
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  secureTextEntry
-                />
+                <View style={styles.passwordInputContainer}>
+                  <TextInput
+                    style={[styles.passwordInput, errors.confirmPassword ? styles.inputError : null]}
+                    placeholder=""
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    secureTextEntry={!showConfirmPassword}
+                  />
+                  <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                    <Icon name={showConfirmPassword ? "visibility-off" : "visibility"} size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                {errors.confirmPassword ? <Text style={styles.errorText}>{errors.confirmPassword}</Text> : null}
               </View>
 
-              <TouchableOpacity style={styles.registerButton} onPress={handleRegister} activeOpacity={0.8}>
-                <Text style={styles.registerButtonText} onPress={() => navigation.navigate('Login')}>Registrar</Text>
+              <TouchableOpacity 
+                style={styles.registerButton} 
+                onPress={handleRegister} 
+                activeOpacity={0.8}
+              >
+                <Text style={styles.registerButtonText}>Registrar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -269,6 +318,33 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 16,
   },
+  // New styles for password input with icon
+  passwordInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 4,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    borderRadius: 4,
+  },
+  eyeIcon: {
+    padding: 10,
+  },
+  inputError: {
+    borderWidth: 1,
+    borderColor: "#FF3B30",
+  },
+  errorText: {
+    color: "#FF3B30",
+    fontSize: 12,
+    marginTop: 4,
+  },
   radioContainer: {
     flexDirection: "row",
     marginTop: 8,
@@ -313,3 +389,6 @@ const styles = StyleSheet.create({
 })
 
 export default RegisterScreen
+
+// Test the component
+console.log("RegisterScreen loaded with password visibility toggle");
