@@ -180,18 +180,18 @@ const HomeScreen = ({ navigation }: any) => {
   }
 
   // Função para lidar com o logout
-//   const handleLogout = () => {
-//     // Aqui você implementaria a lógica de logout
-//     alert("Logout realizado com sucesso!")
-//     setMenuVisible(false)
-//   }
+  //   const handleLogout = () => {
+  //     // Aqui você implementaria a lógica de logout
+  //     alert("Logout realizado com sucesso!")
+  //     setMenuVisible(false)
+  //   }
 
-//   // Função para editar perfil
-//   const handleEditProfile = () => {
-//     // Aqui você implementaria a navegação para a tela de edição de perfil
-//     alert("Navegar para a tela de edição de perfil")
-//     setMenuVisible(false)
-//   }
+  //   // Função para editar perfil
+  //   const handleEditProfile = () => {
+  //     // Aqui você implementaria a navegação para a tela de edição de perfil
+  //     alert("Navegar para a tela de edição de perfil")
+  //     setMenuVisible(false)
+  //   }
 
   // Função para abrir o modal de registro manual
   const openManualRegister = () => {
@@ -229,9 +229,9 @@ const HomeScreen = ({ navigation }: any) => {
     navigation.navigate("History")
   }
 
-   // Função para navegar para a tela de cálculo
-   const navigateToCalculation = () => {
-    navigation.navigate("Calculation")
+  // Função para navegar para a tela de cálculo
+  const navigateToCalculation = () => {
+    navigation.navigate("Calculation", { isPJ })
   }
 
   return (
@@ -503,7 +503,7 @@ const HomeScreen = ({ navigation }: any) => {
             <Icon name="home" size={24} color="#4CAF50" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}onPress={navigateToCalculation}>
+        <TouchableOpacity style={styles.navItem} onPress={navigateToCalculation}>
           <Icon name="calculate" size={24} color="#CCCCCC" />
         </TouchableOpacity>
       </View>
