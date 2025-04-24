@@ -347,7 +347,7 @@ const HomeScreen = ({ navigation }: any) => {
                 </View>
               </View>
 
-              {/* Horários em duas colunas */}
+              {/* Entrada e Saída Almoço */}
               <View style={styles.manualRegisterRow}>
                 <View style={styles.manualRegisterColumn}>
                   <Text style={styles.manualRegisterLabel}>Entrada</Text>
@@ -378,6 +378,7 @@ const HomeScreen = ({ navigation }: any) => {
                 </View>
               </View>
 
+              {/* Retorno Almoço e Saída */}
               <View style={styles.manualRegisterRow}>
                 <View style={styles.manualRegisterColumn}>
                   <Text style={styles.manualRegisterLabel}>Retorno Almoço</Text>
@@ -406,19 +407,19 @@ const HomeScreen = ({ navigation }: any) => {
                     <FontAwesomeIcon icon={faCaretDown} size={24} color="#666" />
                   </View>
                 </View>
+              </View>
 
-                {/* Observação */}
-                <View style={styles.manualRegisterField}>
-                  <Text style={styles.manualRegisterLabel}>Observação (Opção)</Text>
-                  <TextInput
-                    style={[styles.manualRegisterInput, styles.manualRegisterTextArea]}
-                    value={manualObservation}
-                    onChangeText={setManualObservation}
-                    placeholder="Adicione observação sobre este registro"
-                    multiline={true}
-                    numberOfLines={3}
-                  />
-                </View>
+              {/* Observação (fora das colunas) */}
+              <View style={styles.manualRegisterField}>
+                <Text style={styles.manualRegisterLabel}>Observação (Opção)</Text>
+                <TextInput
+                  style={[styles.manualRegisterInput, styles.manualRegisterTextArea]}
+                  value={manualObservation}
+                  onChangeText={setManualObservation}
+                  placeholder="Adicione observação sobre este registro"
+                  multiline={true}
+                  numberOfLines={3}
+                />
               </View>
             </ScrollView>
 
