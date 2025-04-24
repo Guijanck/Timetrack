@@ -3,7 +3,8 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useState } from "react"
 import { View, Text, StyleSheet, SafeAreaView, StatusBar, TextInput, TouchableOpacity, ScrollView, Platform } from "react-native"
-import Icon from "react-native-vector-icons/MaterialIcons"
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faClock, faCalendarAlt, faHome, faCalculator } from "@fortawesome/free-solid-svg-icons";
 import { RootStackParamList } from "../../App"
 
 // Tipo para os dados de cálculo mensal
@@ -196,7 +197,7 @@ const CalculationScreen = ({ navigation, route }: any) => {
         <View style={styles.resultsContainer}>
           <View style={styles.resultRow}>
             <View style={styles.resultLabelContainer}>
-              <Icon name="access-time" size={16} color="#666666" style={styles.resultIcon} />
+              <FontAwesomeIcon icon={faClock} size={16} color="#666666" style={styles.resultIcon} />
               <Text style={styles.resultLabel}>Horas Trabalhadas:</Text>
             </View>
             <Text style={styles.resultValue}>{selectedMonth?.hoursWorked}h</Text>
@@ -299,14 +300,14 @@ const CalculationScreen = ({ navigation, route }: any) => {
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("History")}>
-          <Icon name="date-range" size={24} color="#CCCCCC" />
+          <FontAwesomeIcon icon={faCalendarAlt} size={24} color="#CCCCCC" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("Home")}>
-          <Icon name="home" size={24} color="#CCCCCC" />
+          <FontAwesomeIcon icon={faHome} size={24} color="#CCCCCC" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItemActive}>
           <View style={styles.navActiveBackground}>
-            <Icon name="calculate" size={24} color="#4CAF50" />
+            <FontAwesomeIcon icon={faCalculator} size={24} color="#4CAF50" />
           </View>
         </TouchableOpacity>
       </View>

@@ -13,7 +13,8 @@ import {
   ScrollView,
   Platform,
 } from "react-native"
-import Icon from "react-native-vector-icons/MaterialIcons"
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTimes, faCaretDown, faCalendarAlt, faHome, faCalculator } from "@fortawesome/free-solid-svg-icons";
 
 // Tipo para os registros de ponto
 interface TimeRecord {
@@ -307,7 +308,7 @@ const HistoryScreen = ({ navigation }: any) => {
           <View style={styles.pickerModalHeader}>
             <Text style={styles.pickerModalTitle}>Selecione o Mês</Text>
             <TouchableOpacity onPress={() => setShowMonthPicker(false)}>
-              <Icon name="close" size={24} color="#000" />
+              <FontAwesomeIcon icon={faTimes} size={24} color="#000" />
             </TouchableOpacity>
           </View>
           <ScrollView>
@@ -344,7 +345,7 @@ const HistoryScreen = ({ navigation }: any) => {
           <View style={styles.pickerModalHeader}>
             <Text style={styles.pickerModalTitle}>Selecione o Ano</Text>
             <TouchableOpacity onPress={() => setShowYearPicker(false)}>
-              <Icon name="close" size={24} color="#000" />
+              <FontAwesomeIcon icon={faTimes} size={24} color="#000" />
             </TouchableOpacity>
           </View>
           <ScrollView>
@@ -389,7 +390,7 @@ const HistoryScreen = ({ navigation }: any) => {
           <Text style={styles.pickerLabel}>Mês:</Text>
           <View style={styles.pickerValueContainer}>
             <Text style={styles.pickerValue}>{months.find((m) => m.value === selectedMonth)?.label}</Text>
-            <Icon name="arrow-drop-down" size={24} color="#000" />
+            <FontAwesomeIcon icon={faCaretDown} size={24} color="#000" />
           </View>
         </TouchableOpacity>
 
@@ -397,7 +398,7 @@ const HistoryScreen = ({ navigation }: any) => {
           <Text style={styles.pickerLabel}>Ano:</Text>
           <View style={styles.pickerValueContainer}>
             <Text style={styles.pickerValue}>{selectedYear}</Text>
-            <Icon name="arrow-drop-down" size={24} color="#000" />
+            <FontAwesomeIcon icon={faCaretDown} size={24} color="#000" />
           </View>
         </TouchableOpacity>
       </View>
@@ -447,14 +448,14 @@ const HistoryScreen = ({ navigation }: any) => {
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItemActive}>
           <View style={styles.navActiveBackground}>
-            <Icon name="date-range" size={24} color="#4CAF50" />
+            <FontAwesomeIcon icon={faCalendarAlt} size={24} color="#4CAF50" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("Home")}>
-          <Icon name="home" size={24} color="#CCCCCC" />
+          <FontAwesomeIcon icon={faHome} size={24} color="#CCCCCC" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("Calculation")}>
-          <Icon name="calculate" size={24} color="#CCCCCC" />
+          <FontAwesomeIcon icon={faCalculator} size={24} color="#CCCCCC" />
         </TouchableOpacity>
       </View>
     </SafeAreaView>

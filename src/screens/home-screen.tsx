@@ -16,8 +16,9 @@ import {
   ScrollView,
   Platform,
 } from "react-native"
-import Icon from "react-native-vector-icons/MaterialIcons"
-
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCoffee, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCaretDown, faClock, faCalendarAlt, faCalculator, faHome } from "@fortawesome/free-solid-svg-icons";
 // Tipos de registro
 enum RegisterType {
   NONE = "NONE",
@@ -294,7 +295,7 @@ const HomeScreen = ({ navigation }: any) => {
               {/* Botões de Ação */}
               <View style={styles.menuActions}>
                 <TouchableOpacity style={styles.actionButton} >
-                  <Icon name="person" size={20} color="#000" />
+                  <FontAwesomeIcon icon={faUser} size={24} color="#333" />
                   <Text style={styles.actionButtonText}>Editar Perfil</Text>
                 </TouchableOpacity>
 
@@ -342,7 +343,7 @@ const HomeScreen = ({ navigation }: any) => {
                     onChangeText={setManualDate}
                     placeholder="DD/MM/YYYY"
                   />
-                  <Icon name="arrow-drop-down" size={24} color="#666" />
+                  <FontAwesomeIcon icon={faCaretDown} size={24} color="#666" />
                 </View>
               </View>
 
@@ -358,7 +359,7 @@ const HomeScreen = ({ navigation }: any) => {
                       placeholder="HH:MM"
                       keyboardType="numeric"
                     />
-                    <Icon name="arrow-drop-down" size={24} color="#666" />
+                    <FontAwesomeIcon icon={faCaretDown} size={24} color="#666" />
                   </View>
                 </View>
 
@@ -372,7 +373,7 @@ const HomeScreen = ({ navigation }: any) => {
                       placeholder="HH:MM"
                       keyboardType="numeric"
                     />
-                    <Icon name="arrow-drop-down" size={24} color="#666" />
+                    <FontAwesomeIcon icon={faCaretDown} size={24} color="#666" />
                   </View>
                 </View>
               </View>
@@ -388,7 +389,7 @@ const HomeScreen = ({ navigation }: any) => {
                       placeholder="HH:MM"
                       keyboardType="numeric"
                     />
-                    <Icon name="arrow-drop-down" size={24} color="#666" />
+                    <FontAwesomeIcon icon={faCaretDown} size={24} color="#666" />
                   </View>
                 </View>
 
@@ -402,22 +403,22 @@ const HomeScreen = ({ navigation }: any) => {
                       placeholder="HH:MM"
                       keyboardType="numeric"
                     />
-                    <Icon name="arrow-drop-down" size={24} color="#666" />
+                    <FontAwesomeIcon icon={faCaretDown} size={24} color="#666" />
                   </View>
                 </View>
-              </View>
 
-              {/* Observação */}
-              <View style={styles.manualRegisterField}>
-                <Text style={styles.manualRegisterLabel}>Observação (Opção)</Text>
-                <TextInput
-                  style={[styles.manualRegisterInput, styles.manualRegisterTextArea]}
-                  value={manualObservation}
-                  onChangeText={setManualObservation}
-                  placeholder="Adicione observação sobre este registro"
-                  multiline={true}
-                  numberOfLines={3}
-                />
+                {/* Observação */}
+                <View style={styles.manualRegisterField}>
+                  <Text style={styles.manualRegisterLabel}>Observação (Opção)</Text>
+                  <TextInput
+                    style={[styles.manualRegisterInput, styles.manualRegisterTextArea]}
+                    value={manualObservation}
+                    onChangeText={setManualObservation}
+                    placeholder="Adicione observação sobre este registro"
+                    multiline={true}
+                    numberOfLines={3}
+                  />
+                </View>
               </View>
             </ScrollView>
 
@@ -478,7 +479,7 @@ const HomeScreen = ({ navigation }: any) => {
           onPress={registerTime}
           disabled={nextRegisterType === RegisterType.NONE}
         >
-          <Icon name="access-time" size={20} color="#FFFFFF" style={styles.buttonIcon} />
+          <FontAwesomeIcon icon={faClock} size={20} color="#FFFFFF" style={styles.buttonIcon} />
           <Text style={styles.registerButtonText}>{getButtonText()}</Text>
         </TouchableOpacity>
 
@@ -496,15 +497,15 @@ const HomeScreen = ({ navigation }: any) => {
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem} onPress={navigateToHistory}>
-          <Icon name="date-range" size={24} color="#CCCCCC" />
+          <FontAwesomeIcon icon={faCalendarAlt} size={24} color="#CCCCCC" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItemActive}>
           <View style={styles.navActiveBackground}>
-            <Icon name="home" size={24} color="#4CAF50" />
+            <FontAwesomeIcon icon={faHome} size={24} color="#4CAF50" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={navigateToCalculation}>
-          <Icon name="calculate" size={24} color="#CCCCCC" />
+          <FontAwesomeIcon icon={faCalculator} size={24} color="#CCCCCC" />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
